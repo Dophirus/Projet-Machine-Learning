@@ -56,6 +56,41 @@ class Game:
     def getFeatures(self):
         features = numpy.zeros(8)
         
+        snake_head = self.serpent[0]
+        snake_body = self.serpent[1::]
+
+        #Neurone 1-4 TODO : Optimiser
+        testUp = np.add(snake_head, [0,1])
+        testDown = np.add(snake_head, [0,-1])
+        testLeft = np.add(snake_head, [-1,0])
+        testRight = np.add(snake_head, [1,0])
+
+        for coords in snake_body:
+            if np.all(testUp == coords) or not 0 <= testUp[1] < self.hauteur:
+                features[0] = 1
+            if np.all(testDown == coords) or not 0 <= testDown[1] < self.hauteur:
+                features[1] = 1
+            if np.all(testLeft == coords) or not 0 <= testLeft[0] < self.largeur:
+                features[2] = 1
+            if np.all(testRight == coords) or not 0 <= testRight[0] < self.largeur:
+                features[3] = 1
+            
+        # Neurone 5-6
+        features[4] = np.clip([snake_head[0] - self.fruit[0]],-1,1)
+        features[5] = np.clip([snake_head[1] - self.fruit[-1]],-1,1)
+
+        # Neurone 7
+        features[6] = self.direction
+
+        # Neurone 8
+        match self.direction:
+            case 0: features[7] = (snake_head[1]) / self.hauteur 
+            case 1: features[7] = (self.hauteur - snake_head[1]) / self.hauteur 
+            case 2: features[7] = (snake_head[0]) / self.largeur 
+            case 3: features[7] = (self.largeur - snake_head[0]) / self.largeur 
+
+        print(features)
+
         return features
     
     def print(self):
