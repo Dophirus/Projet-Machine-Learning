@@ -3,7 +3,19 @@ from NeuralNetwork import *
 from snake import *
 
 def eval(sol, gameParams):
-    return 0
+    results = np.zeros((gameParams["nbGames"],2))
+    for i in range(0,gameParams["nbGames"]):
+        curGame = Game(gameParams["height"], gameParams["width"])
+        #curGame.print()
+        while curGame.enCours:
+            pred = sol.nn.predict(curGame.getFeatures())
+            curGame.direction = pred
+            curGame.refresh()
+            #curGame.print()
+        results[i] = [curGame.score,curGame.steps]
+        #print(f"game N°{i} : {results[i]}")
+    #print(1 / (gameParams["nbGames"] * gameParams["height"] * gameParams["width"] * 1000) * sum(1000 * results[i][0] + results[i][1] for i in range(gameParams["nbGames"])))
+    return 1 / (gameParams["nbGames"] * gameParams["height"] * gameParams["width"] * 1000) * sum(1000 * results[i][0] + results[i][1] for i in range(gameParams["nbGames"]))       
 
 '''
 Représente une solution avec
