@@ -26,6 +26,12 @@ class Dense:
         self.weights = np.random.randn(inputShape[0], outputShape[0]) * std
 
         self.inputErrors = np.zeros(inputShape)
+
+    def clone(self): #copie complète de la couche, pour la sauvegarde lors de l'apprentissage
+        copie = Dense(self.inputShape, self.outputShape, self.activationFunction, self.activationDerivate)
+        copie.bias = self.bias.copy()
+        copie.weights = self.weights.copy()
+        return copie
         
     def compute(self, inputs):
         self.inputs = inputs

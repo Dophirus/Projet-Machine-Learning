@@ -8,6 +8,12 @@ class NeuralNetwork:
         self.inputShape = inputShape
         self.layers = []
 
+    def clone(self):
+        nn = NeuralNetwork(self.inputShape)
+        for layer in self.layers:
+            nn.layers.append(layer.clone())
+        return nn
+
     def addLayer(self, size, activationFunctionStr):
         activationFunction = relu
         d_activationFunction = d_relu
